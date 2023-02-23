@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -25,6 +26,12 @@ app.set('views', path.join(__dirname, '/views'));
 
 // 1) GLOBAL MIDDLEWARES
 // Serving static files
+app.use(cors());
+
+// implementing cors for the complex requests like patch and delete to all the routes
+// basically responding to the browser's header that it sent during preflight phase
+app.options('*', cors());
+
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Set security HTTP headers
